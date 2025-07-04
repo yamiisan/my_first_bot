@@ -5,12 +5,12 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv() #.envファイルから環境変数を読み込む
 
 app = Flask(__name__)
 
-line_bot_api = LineBotApi(os.environ["ACCESS_TOKEN"])
-handler = WebhookHandler(os.environ["CHANNEL_SECRET"])
+line_bot_api = LineBotApi(os.environ["ACCESS_TOKEN"]) # LINE Messaging APIのアクセストークン設定 インスタンス化
+handler = WebhookHandler(os.environ["CHANNEL_SECRET"]) # APIのチャネルシークレット設定　ウェブフックから来た情報と照合するためのインスタンス化
 
 
 @app.route("/")
@@ -23,7 +23,7 @@ def push_sample():
     """プッシュメッセージを送る"""
     user_id = os.environ["USER_ID"]
     line_bot_api.push_message(
-        user_id, TextSendMessage(text="Hello, this is a push message!")
+        user_id, TextSendMessage(text="Hello World!")
     )
     return "OK"
 
@@ -37,7 +37,7 @@ def callback():
 
     try:
         handler.handle(body, signature)
-    except InvalidSignatureError as e:
+    except InvalidSignatureError:
         abort(400)
 
     return "OK"
